@@ -13,9 +13,18 @@ class ElTable extends Component {
                 return <th key={key} style={style || {}} >{this.props.argument[key].label}</th>
             }
         );
-        
-
         this.elementLength = th.length;
+        if( this.props.argument?.buttonEdit ) {
+            this.elementLength--;
+           }
+
+           if( this.props.argument?.buttonView ) {
+            this.elementLength--;
+                }
+
+            if( this.props.argument?.buttonDel ) {
+                this.elementLength--;
+            }
         return <thead><tr>{th}</tr></thead>;
     }
     getTbody() {
@@ -36,19 +45,20 @@ class ElTable extends Component {
                return <td key={key} data-key={key}>{item[key]}</td>
            }
        );
+       var trCollectionSlice = trCollectioin.slice(0, this.elementLength)
            if( this.props.argument?.buttonEdit ) {
-                trCollectioin.push(<td key="edit" data-key="edit" onClick={()=>{alert("edit" + item.id)}}>edit</td>)
+            trCollectionSlice.push(<td key="edit" data-key="edit" id={item.id} onClick={this.props.editAction}>edit</td>)
            }
 
            if( this.props.argument?.buttonView ) {
-            trCollectioin.push(<td key="view" data-key="view" onClick={()=>{alert("view" + item.id)}}>view</td>)
+            trCollectionSlice.push(<td key="view" data-key="view" id={item.id} onClick={this.props.viewAction}>view</td>)
                 }
 
             if( this.props.argument?.buttonDel ) {
-                    trCollectioin.push(<td key="del" data-key="del" onClick={()=>{alert("del" + item.id)}}>del</td>)
+                trCollectionSlice.push(<td key="del" data-key="del" id={item.id} onClick={this.props.delAction}>del</td>)
             }
 
-       return <tr key={item.id} data-key={item.id}>{trCollectioin.slice(0, this.elementLength)}</tr>;
+       return <tr key={item.id} data-key={item.id}>{trCollectionSlice}</tr>;
     }
     
     render() {

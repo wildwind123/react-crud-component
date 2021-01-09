@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import {Redirect, Link} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class ElItem extends Component {
 
-
+    constructor(props) {
+        super(props);
+    }
 
     getFormGroups() {
-        var keys = Object.keys(this.props.item);
         var argument = this.props.argument;
+        delete argument['buttonDel'];
+        delete argument['buttonEdit'];
+        delete argument['buttonView'];
+        var keys = Object.keys(argument);
         var forms = keys.map(
             (key) => {
                 var type = "text";
@@ -34,7 +40,7 @@ class ElItem extends Component {
                             } 
                             return "";
                         }(this.props.mode, this.props.item[key])
-                    }/>
+                    } name={key}/>
                     </Form.Group>
             }
         );
@@ -45,17 +51,15 @@ class ElItem extends Component {
         if ( this.props.mode === "view" ) {
             return "";
         } else if ( this.props.mode === "edit" ) {
-            return <><Button variant="primary" onClick={function(){ alert("save" + id) } }>
+            return <><Button variant="primary" onClick={this.props.editItemAjax} type="submit">
             Save
             </Button> {' '}
-            <Button variant="secondary" onClick={function(){ 
-                alert("del" + id) 
-                } } >
+            <Button variant="secondary" onClick={this.props.delItemAjax} >
             Del
             </Button></> ;
         }
-      return  <><Button variant="primary" onClick={function(){ alert("new" + id) } } >
-             Save
+      return  <><Button variant="primary" onClick={this.props.newItemAjax } >
+             Create
              </Button> {' '}
              </> ;
     }
@@ -85,16 +89,16 @@ ElItem.defaultProps = {
                 }
             }
         },
-        name : {
+        first_name : {
             label: "Имя",
             type: "text",
             attribute: {
               
             }
         },
-        age : {
-            label: "Возраст",
-            type: "number",
+        email : {
+            label: "Эмайл",
+            type: "text",
             attribute: {
               
             }
